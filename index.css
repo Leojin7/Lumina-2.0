@@ -1,0 +1,223 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 222 40% 6%;
+    --foreground: 210 40% 98%;
+
+    --card: 220 30% 10%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222 22% 11%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 213 90% 55%;
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 215 20% 25%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 215 16% 23%;
+    --muted-foreground: 215 16% 57%;
+
+    --accent: 215 20% 25%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 71% 38%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 214 30% 18%;
+    --input: 214 30% 15%;
+    --ring: 213 90% 60%;
+
+    --success: 142 71% 45%;
+    --success-foreground: 140 60% 94%;
+
+    --warning: 48 96% 53%;
+    --warning-foreground: 48 100% 98%;
+
+    --radius: 0.95rem;
+
+    /* World-class Aurora Gradient (animated + multi-stop) */
+    --aurora-gradient:
+      radial-gradient(at 20% 20%, hsla(213,90%,56%,0.19) 0px, transparent 50%),
+      radial-gradient(at 80% 25%, hsla(292,92%,50%,0.12) 0px, transparent 50%),
+      radial-gradient(at 15% 82%, hsla(185,89%,62%,0.17) 0px, transparent 52%),
+      radial-gradient(at 83% 85%, hsla(340,60%,55%,0.07) 0px, transparent 65%),
+      radial-gradient(at 76% 59%, hsla(48,90%,60%,0.03) 0px, transparent 60%);
+  }
+}
+
+body {
+  @apply bg-background text-foreground;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+  font-family: 'Inter', 'SF Pro Display', 'Segoe UI', 'Roboto', Arial, sans-serif;
+  letter-spacing: 0.01em;
+  /* Subtle vignette overlay for further depth */
+  position: relative;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-color: hsl(var(--background));
+  background-image: var(--aurora-gradient);
+  /* Subtle, cyclical animation for living UI */
+  animation: auroraMove 36s ease-in-out infinite alternate;
+  opacity: 0.92;
+  filter: blur(0.7px) saturate(1.16);
+}
+
+@keyframes auroraMove {
+  0% {
+    background-position: 0% 0%, 50% 10%, 15% 82%, 83% 85%, 60% 0%;
+  }
+  100% {
+    background-position: 42% 26%, 90% 100%, 36% 65%, 93% 99%, 86% 46%;
+  }
+}
+
+@layer components {
+  .glass-blur {
+    background: inherit;
+    backdrop-filter: blur(42px) saturate(1.1) brightness(1.05);
+    /* layered glass visual */
+    border-radius: var(--radius);
+    border: 1.5px solid rgba(255,255,255,0.07);
+    box-shadow:
+      0 4px 32px 0 rgba(58,76,159,0.13),
+      0 1.5px 8px 0 rgba(43,48,75,0.08);
+    transition: background 0.3s, box-shadow 0.25s;
+  }
+}
+
+
+.custom-scrollbar {
+  scrollbar-gutter: stable both-edges;
+}
+.custom-scrollbar::-webkit-scrollbar {
+  width: 9px;
+  background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, hsl(var(--muted)), hsl(var(--muted-foreground)));
+  border-radius: 5.5px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+  transition: background .25s;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(110deg, hsl(var(--primary)/.18), hsl(var(--primary)/.29));
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-corner {
+  background: transparent;
+}
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: hsl(var(--muted)) transparent;
+}
+
+:focus-visible {
+  outline: 2.5px solid hsl(var(--ring));
+  outline-offset: 4px;
+  box-shadow: 0 0 0 2.5px hsl(var(--ring) / 0.19);
+  border-radius: var(--radius);
+  transition: outline 0.17s cubic-bezier(.8,.25,.34,1.01);
+}
+
+::selection {
+  background-color: hsl(var(--primary) / 0.31);
+  color: hsl(var(--primary-foreground));
+}
+
+input,
+textarea,
+button,
+select {
+  font-family: inherit;
+}
+
+input:disabled,
+button:disabled,
+textarea:disabled {
+  opacity: 0.6;
+  background-color: hsl(var(--input))/0.85;
+  cursor: not-allowed;
+}
+
+a {
+  color: hsl(var(--primary));
+  text-underline-offset: 2.5px;
+  transition: color 0.18s;
+}
+a:hover {
+  color: hsl(var(--primary) / 0.74);
+  text-decoration: underline;
+}
+
+/* Tooltip styling */
+[role="tooltip"] {
+  pointer-events: none !important;
+  color: white;
+  background: hsl(var(--muted)/.83);
+  border-radius: 0.8rem;
+  padding: 0.6em 1.15em;
+  font-weight: 500;
+  font-size: 1rem;
+  letter-spacing: 0.015em;
+  box-shadow: 0 3px 18px rgba(43,50,106,0.09);
+  border: 1px solid hsl(var(--border));
+  backdrop-filter: blur(14px);
+  text-align: left;
+  transition: opacity .18s;
+}
+
+/* Button touch feedback for modern tactile feel */
+button, .btn, [role="button"] {
+  transition: background 0.14s, box-shadow 0.17s, color 0.19s, border-color 0.19s;
+  will-change: background, box-shadow, color;
+  position: relative;
+}
+button:active, [role="button"]:active {
+  filter: brightness(0.98) contrast(1.045) saturate(1.05);
+  box-shadow: 0 1px 18px 0 hsla(var(--primary)/.09);
+}
+
+input:focus, textarea:focus, select:focus {
+  border-color: hsl(var(--ring));
+  box-shadow: 0 0 0 2px hsl(var(--ring)/.23);
+  outline: none;
+  transition: border-color 0.18s, box-shadow 0.2s;
+}
+
+/* Glass modal backdrop for modals/dialogs */
+.glass-modal {
+  background: rgba(23, 20, 38, 0.5);
+  backdrop-filter: blur(16px) brightness(1.11);
+}
+
+@media (max-width: 768px) {
+  .glass-blur {
+    border-radius: 1.16rem;
+    box-shadow: 0 4px 18px 0 rgb(58 76 159 / 13%);
+  }
+}
+
+::-webkit-input-placeholder { color: hsl(var(--muted-foreground)); }
+::-moz-placeholder { color: hsl(var(--muted-foreground)); }
+:-ms-input-placeholder { color: hsl(var(--muted-foreground)); }
+::placeholder { color: hsl(var(--muted-foreground)); }
+
+body, body * {
+  color: #fff !important;
+}
