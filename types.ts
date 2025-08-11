@@ -1,4 +1,5 @@
 
+
 declare global {
   interface Window {
     firebaseConfig: {
@@ -333,4 +334,16 @@ export interface Task {
   status: 'todo' | 'in_progress' | 'completed' | 'error';
   result?: AgentExecutionResult;
   assignedAgent?: AgentType;
+}
+
+// Types for NotebookLM
+export interface NotebookSlide {
+  title: string;
+  points: string[];
+  narration: string;
+}
+
+export interface NotebookScript {
+  summary: string;
+  slides: NotebookSlide[];
 }
