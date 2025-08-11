@@ -1,6 +1,6 @@
 import React from 'react';
 import * as ReactRouterDOM from 'react-router-dom';
-import { Home, List, BarChart2, User as UserIcon, ShieldCheck, Sun, Settings as SettingsIcon, Users, Smile, Code2, LayoutGrid, Wand2, Shield } from 'lucide-react';
+import { Home, List, BarChart2, User as UserIcon, ShieldCheck, Sun, Settings as SettingsIcon, Users, Smile, Code2, LayoutGrid, Wand2, Shield, BookOpen } from 'lucide-react';
 import { motion } from 'framer-motion';
 import AIAssistantModal from './AIAssistantModal';
 import { useUserStore } from '../stores/useUserStore';
@@ -25,6 +25,7 @@ import AccountTab from './AccountTab';
 import Agents from '../pages/Agents';
 import Transparency from '../pages/Transparency';
 import StoreTab from './StoreTab';
+import NotebookLM from '../pages/NotebookLM';
 
 
 const MainLayout: React.FC = () => {
@@ -47,6 +48,7 @@ const MainLayout: React.FC = () => {
             <NavItem to="/portfolio" icon={<LayoutGrid size={20}/>} label="Portfolio" />
             <NavItem to="/agents" icon={<Wand2 size={20}/>} label="Agents" />
             <NavItem to="/arena" icon={<Code2 size={20}/>} label="Arena" />
+            <NavItem to="/notebooklm" icon={<BookOpen size={20}/>} label="NotebookLM" />
             <NavItem to="/quizzes" icon={<List size={20}/>} label="Quizzes" />
             <NavItem to="/focus" icon={<Sun size={20}/>} label="Focus" />
             <NavItem to="/wellness" icon={<Smile size={20}/>} label="Wellness" />
@@ -73,6 +75,7 @@ const MainLayout: React.FC = () => {
             <ReactRouterDOM.Route path="portfolio" element={<Portfolio />} />
             <ReactRouterDOM.Route path="agents" element={<Agents />} />
             <ReactRouterDOM.Route path="arena" element={<CodingArena />} />
+            <ReactRouterDOM.Route path="notebooklm" element={<NotebookLM />} />
             <ReactRouterDOM.Route path="quizzes" element={<QuizzesList />} />
             <ReactRouterDOM.Route path="quiz/:quizId" element={<QuizView />} />
             <ReactRouterDOM.Route path="focus" element={<Focus />} />
