@@ -2,8 +2,10 @@
 
 
 
+
+
 import { GoogleGenAI, GenerateContentResponse, Type } from "@google/genai";
-import type { Question, Quiz, CognitiveStateAnalysis, QuizResult, FocusSession, DailyMission, ChatMessage, PortfolioProject, TimelineEvent, Skill, GeneratedResumeContent, AgentExecutionResult, SleepEntry, DailyCheckin, FocusStory, AudioEnvironmentAnalysis } from '../types';
+import type { Question, Quiz, CognitiveStateAnalysis, QuizResult, FocusSession, DailyMission, ChatMessage, PortfolioProject, TimelineEvent, Skill, GeneratedResumeContent, AgentExecutionResult, SleepEntry, DailyCheckin, FocusStory, AudioEnvironmentAnalysis, NotebookScript, NotebookSlide } from '../types';
 
 
 const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
@@ -879,4 +881,68 @@ export const generateWellnessInsights = async (data: {
         config: { responseMimeType: 'application/json', responseSchema: schema }
     });
     return JSON.parse(response.text);
+};
+
+/**
+ * Generates a summary and presentation script from source text for NotebookLM.
+ * @param sourceText The user's provided source material.
+ * @returns A promise that resolves to a NotebookScript object.
+ */
+export const generateNotebookScript = async (sourceText: string): Promise<NotebookScript> => {
+    const slideSchema = {
+        type: Type.OBJECT,
+        properties: {
+            title: { type: Type.STRING, description: 'A concise title for the slide.' },
+            points: {
+                type: Type.ARRAY,
+                items: { type: Type.STRING },
+                description: 'An array of 2-4 key bullet points for the slide.'
+            },
+            narration: {
+                type: Type.STRING,
+                description: 'A brief, engaging narration script for this slide (1-3 sentences).'
+            }
+        },
+        required: ['title', 'points', 'narration']
+    };
+
+    const scriptSchema = {
+        type: Type.OBJECT,
+        properties: {
+            summary: {
+                type: Type.STRING,
+                description: 'A comprehensive, well-structured summary of the source text (3-5 paragraphs).'
+            },
+            slides: {
+                type: Type.ARRAY,
+                description: 'An array of 3-5 slides that form a presentation about the source text.',
+                items: slideSchema
+            }
+        },
+        required: ['summary', 'slides']
+    };
+
+    const prompt = `You are an expert instructional designer. Analyze the following source text and transform it into a structured learning module.
+
+Your task is to generate two things:
+1.  A detailed, paragraph-based summary of the entire text.
+2.  A script for a short presentation (3-5 slides). Each slide must have a title, a few bullet points, and a corresponding narration script.
+
+Source Text:
+---
+${sourceText}
+---
+
+Generate the output in a valid JSON format.`;
+
+    const response = await ai.models.generateContent({
+        model: ASSISTANT_MODEL,
+        contents: prompt,
+        config: {
+            responseMimeType: 'application/json',
+            responseSchema: scriptSchema,
+        }
+    });
+
+    return JSON.parse(response.text.trim());
 };
