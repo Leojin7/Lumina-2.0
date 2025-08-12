@@ -1,45 +1,8 @@
 import { GoogleGenAI, GenerateContentResponse, Type } from "@google/genai";
 import type { Question, Quiz, CognitiveStateAnalysis, QuizResult, FocusSession, DailyMission, ChatMessage, PortfolioProject, TimelineEvent, Skill, GeneratedResumeContent, AgentExecutionResult, SleepEntry, DailyCheckin, FocusStory, AudioEnvironmentAnalysis, NotebookScript, NotebookSlide } from '../types';
 
-function initializeAiClient(): GoogleGenAI {
-    // This function safely initializes the GoogleGenAI client.
-    // It checks for the API key in a way that doesn't crash in a browser where `process` is not defined.
-    const apiKey = (typeof process !== 'undefined' && process.env?.API_KEY) || undefined;
 
-    if (!apiKey) {
-        console.warn(
-            "Lumina AI Warning: 'API_KEY' environment variable not found. AI features will not work. Please ensure the key is set in your environment."
-        );
-        // If no API key is found, we return a "dummy" client.
-        // This allows the app to load without crashing. When any AI function is called,
-        // it will throw a clear error, which is better than a startup crash.
-        const createErrorThrower = (name: string) => () => {
-            throw new Error(`AI service not initialized (calling "${name}"). Is the API key configured?`);
-        };
-        return {
-            models: new Proxy({}, {
-                get(target, prop) {
-                    return createErrorThrower(`models.${String(prop)}`);
-                }
-            }),
-            chats: new Proxy({}, {
-                get(target, prop) {
-                    return createErrorThrower(`chats.${String(prop)}`);
-                }
-            }),
-            operations: new Proxy({}, {
-                get(target, prop) {
-                    return createErrorThrower(`operations.${String(prop)}`);
-                }
-            }),
-        } as any;
-    }
-
-    // If an API key is found, initialize the real client.
-    return new GoogleGenAI({ apiKey });
-}
-
-const ai = initializeAiClient();
+const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 const ASSISTANT_MODEL = 'gemini-2.5-flash';
 const IMAGE_GEN_MODEL = 'imagen-3.0-generate-002';
 const ASSISTANT_SYSTEM_INSTRUCTION = "You are Cerebrum AI, an expert cognitive coach and learning strategist within the Lumina ecosystem. Your personality is that of a wise, encouraging mentor. Your purpose is to help users optimize their learning, enhance focus, and cultivate mental well-being. Your responses should be insightful, empathetic, and actionable, guiding users toward peak performance. Avoid generic AI phrases. Use markdown for clarity and structure. When a user uploads an image, analyze it in the context of their prompt.";
@@ -513,7 +476,7 @@ export const generateStudyPlan = async (quizHistory: QuizResult[], focusHistory:
         model: 'gemini-2.5-flash',
         contents: prompt,
         config: {
-            responseMimeType: "application/json",
+            responseMimeType: 'application/json',
             responseSchema: schema
         }
     });
