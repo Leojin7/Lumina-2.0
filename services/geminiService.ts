@@ -1,14 +1,25 @@
-
-
-
-
-
-
 import { GoogleGenAI, GenerateContentResponse, Type } from "@google/genai";
 import type { Question, Quiz, CognitiveStateAnalysis, QuizResult, FocusSession, DailyMission, ChatMessage, PortfolioProject, TimelineEvent, Skill, GeneratedResumeContent, AgentExecutionResult, SleepEntry, DailyCheckin, FocusStory, AudioEnvironmentAnalysis, NotebookScript, NotebookSlide } from '../types';
 
+// Helper to safely access the API key, preventing crashes in environments without `process`.
+const getApiKey = (): string | undefined => {
+  if (typeof process !== 'undefined' && process.env) {
+    return process.env.API_KEY;
+  }
+  return undefined;
+};
 
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+const apiKey = getApiKey();
+if (!apiKey) {
+  // This provides a clear developer warning if the API key is missing.
+  // The app won't crash, but Gemini features will fail.
+  console.warn(
+    "Lumina AI Warning: 'API_KEY' environment variable not found. " +
+    "AI features will not work. Please ensure the key is set in your environment."
+  );
+}
+
+const ai = new GoogleGenAI({ apiKey: apiKey });
 const ASSISTANT_MODEL = 'gemini-2.5-flash';
 const IMAGE_GEN_MODEL = 'imagen-3.0-generate-002';
 const ASSISTANT_SYSTEM_INSTRUCTION = "You are Cerebrum AI, an expert cognitive coach and learning strategist within the Lumina ecosystem. Your personality is that of a wise, encouraging mentor. Your purpose is to help users optimize their learning, enhance focus, and cultivate mental well-being. Your responses should be insightful, empathetic, and actionable, guiding users toward peak performance. Avoid generic AI phrases. Use markdown for clarity and structure. When a user uploads an image, analyze it in the context of their prompt.";
