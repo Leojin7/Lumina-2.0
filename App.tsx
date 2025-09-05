@@ -18,6 +18,7 @@ const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) =
   return <>{children}</>;
 };
 
+
 const App: React.FC = () => {
   const [isAuthChecked, setIsAuthChecked] = useState(false);
   const { setCurrentUser, clearUser } = useUserStore();
