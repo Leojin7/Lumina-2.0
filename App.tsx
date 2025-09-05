@@ -8,7 +8,6 @@ import { useUserStore } from './stores/useUserStore';
 import { Loader2 } from 'lucide-react';
 
 // This component is the key. It redirects if the user is not logged in.
-
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const currentUser = useUserStore(state => state.currentUser);
   if (!currentUser) {
