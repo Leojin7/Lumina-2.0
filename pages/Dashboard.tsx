@@ -19,7 +19,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import HabitTracker from '../components/HabitTracker';
 import NotesTaker from '../components/NotesTaker';
 
-//
 const ElegantShape = ({
   className,
   delay = 0,
