@@ -94,7 +94,7 @@ const GlassCard = ({
   </motion.div>
 );
 
-// Glass Input Wrapper
+// Glass Input 
 const GlassInputWrapper = ({ children }: { children: React.ReactNode }) => (
   <div className="rounded-2xl border border-border bg-input/50 backdrop-blur-sm transition-colors focus-within:border-primary/70 focus-within:bg-primary/10">
     {children}
