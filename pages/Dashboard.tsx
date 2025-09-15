@@ -62,7 +62,7 @@ const ElegantShape = ({
   </motion.div>
 );
 
-// Glass Card Wrapper 
+// Glass Card 
 const GlassCard = ({ 
   children, 
   title, 
